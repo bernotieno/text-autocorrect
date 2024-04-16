@@ -1,3 +1,3 @@
-module example.com/go-reloaded
+module reloaded
 
 go 1.22.1
