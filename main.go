@@ -211,7 +211,7 @@ func main() {
 	finalResult := wordsTransformer(result)
 
 	// Join the transformed words into a single string separated by spaces
-	finalStr := strings.Join(finalResult, " ")
+	finalStr := strings.Join(finalResult, " ") + "\n"
 
 	// Write the final string to the output file
 	document := os.WriteFile(args[1], []byte(finalStr), 0o644)
