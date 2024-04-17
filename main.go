@@ -9,87 +9,88 @@ import (
 	"unicode"
 )
 
-// Converts a string representation of a number in a given base to its decimal equivalent.
+// convertToDecimal converts a string representation of a number in a given base to its decimal equivalent.
 func convertToDecimal(str string, baseNo int) string {
 	// Parse the string as an integer with the given base
 	val, err := strconv.ParseInt(str, baseNo, 64)
 	if err != nil {
 		fmt.Println(err)
 	} else {
-		// Convert the parsed value to string
+		// Convert the parsed value back to string
 		str = strconv.Itoa(int(val))
 	}
 	return str
 }
 
-// Extracts the numerical value from a string and converts it to an integer.
+// CapitalizeWord capitalizes the first letter of a word.
+func CapitalizeWord(word string) string {
+	if len(word) == 0 {
+		return word
+	}
+	return strings.ToUpper(string(word[0])) + word[1:]
+}
+
+// numberAfterCom extracts the numerical value from a string and converts it to an integer.
 func numberAfterCom(str string) int {
 	// Initialize an empty string to store the numerical value
 	var val string
 
 	for _, char := range str {
-		// Check if the character is a digit, append it to val
 		if unicode.IsDigit(char) {
 			val += string(char)
 		}
 	}
-
 	result, _ := strconv.Atoi(val)
-
 	return result
 }
 
-// Checks if a given character is a vowel.
+// vowelCase checks if a given character is a vowel.
 func vowelCase(char byte) bool {
-	switch char {
-	case 'a', 'e', 'i', 'o', 'u', 'h':
-		return true
-	default:
-		return false
+	vowels := []byte{'a', 'e', 'i', 'o', 'u', 'h'}
+	for _, v := range vowels {
+		if char != v {
+			return false
+		}
 	}
+	return true
 }
 
-
-
 // Adjusts the punctuation placement in a slice of words.
-
 func punctuations(s []string) []string {
 	puncs := []string{",", ".", "!", "?", ":", ";"}
 
 	// Adjust punctuation placement in words
 	for i, word := range s {
-		for _, punc := range puncs {
+		for _, p := range puncs {
 			// If word starts with punctuation but does not end with it, move the punctuation to the previous word
-			if strings.HasPrefix(word, punc) && !strings.HasSuffix(word, punc) {
-				s[i-1] += punc
+			if strings.HasPrefix(word, p) && !strings.HasSuffix(word, p) {
+				s[i-1] += p
 				s[i] = word[1:]
 			}
 		}
 	}
 
-	// Adjust punctuation placement in words for special cases
+	// special case1:If word starts with punctuation and it's the last word, move the punctuation to the previous word
 	for i, word := range s {
-		for _, punc := range puncs {
-			// If word starts with punctuation and it's the last word, move the punctuation to the previous word
-			if strings.HasPrefix(word, punc) && s[len(s)-1] == word {
+		for _, p := range puncs {
+			if strings.HasPrefix(word, p) && s[len(s)-1] == word {
 				s[i-1] += word
 				s = s[:len(s)-1]
 			}
 		}
 	}
 
-	// Adjust punctuation placement in words for special cases
+	// special case2 :If word starts and ends with punctuation and it's not the last word, move the punctuation to the previous word
 	for i, word := range s {
-		for _, punc := range puncs {
-			// If word starts and ends with punctuation and it's not the last word, move the punctuation to the previous word
-			if strings.HasPrefix(word, punc) && strings.HasSuffix(word, punc) && s[i] != s[len(s)-1] {
+		for _, p := range puncs {
+			if strings.HasPrefix(word, p) && strings.HasSuffix(word, p) && s[i] != s[len(s)-1] {
 				s[i-1] += word
 				s = append(s[:i], s[i+1:]...)
 			}
 		}
 	}
 
-	// Adjust punctuation placement for single quotation marks
+	// placement of the first single quotation mark: front one
 	count := 0
 	for i, word := range s {
 		// If the word is a single quotation mark and it's the first occurrence, move it to the next word
@@ -100,9 +101,9 @@ func punctuations(s []string) []string {
 		}
 	}
 
-	// Adjust punctuation placement for single quotation marks
+	// placement of the second single quotation mark: back one
 	for i, word := range s {
-		// If the word is a single quotation mark and it's not the first occurrence, move it to the previous word
+		// If the word is a single quotation mark and it's the second occurrence, move it to the previous word
 		if word == "'" {
 			s[i-1] = s[i-1] + word
 			s = append(s[:i], s[i+1:]...)
@@ -113,7 +114,8 @@ func punctuations(s []string) []string {
 	return s
 }
 
-func wordsChanger(str []string) []string {
+// wordsTransformer applies various transformations to words in a slice.
+func wordsTransformer(str []string) []string {
 	for i, word := range str {
 		switch word {
 		case "(hex)":
@@ -135,13 +137,13 @@ func wordsChanger(str []string) []string {
 			str = append(str[:i], str[i+1:]...)
 		case "(cap)":
 			// Capitalize the previous word
-			str[i-1] = strings.Title(str[i-1])
+			str[i-1] = CapitalizeWord(str[i-1])
 			str = append(str[:i], str[i+1:]...)
 		case "(cap,":
 			// Capitalize preceding words based on the value after the comma
 			val := numberAfterCom(str[i+1])
 			for j := 1; j <= val; j++ {
-				str[i-j] = strings.Title(str[i-j])
+				str[i-j] = CapitalizeWord(str[i-j])
 			}
 			str = append(str[:i], str[i+2:]...)
 		case "(up,":
@@ -175,7 +177,6 @@ func wordsChanger(str []string) []string {
 func main() {
 	// Check if the correct number of command line arguments is provided
 	if len(os.Args) != 3 {
-		fmt.Println("Invalid parameters, usage: go run . par1 par2")
 		return
 	}
 
@@ -195,7 +196,7 @@ func main() {
 	var lines string
 	// Read lines from file and concatenate them into a single string
 	for scanner.Scan() {
-		lines += scanner.Text() + " "
+		lines += scanner.Text() + "\n"
 	}
 
 	// Check for any scanning errors
@@ -207,15 +208,14 @@ func main() {
 	result := strings.Fields(lines)
 
 	// Transform each word according to some logic
-	finalResult := wordsChanger(result)
+	finalResult := wordsTransformer(result)
 
 	// Join the transformed words into a single string separated by spaces
 	finalStr := strings.Join(finalResult, " ")
 
 	// Write the final string to the output file
-	doc := os.WriteFile(args[1], []byte(finalStr), 0o644)
-	if doc != nil {
-		panic(doc) // Panic if writing to file fails
+	document := os.WriteFile(args[1], []byte(finalStr), 0o644)
+	if document != nil {
+		fmt.Println(document) // Panic if writing to file fails
 	}
-
 }
