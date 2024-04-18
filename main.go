@@ -40,19 +40,21 @@ func numberAfterCom(str string) int {
 			val += string(char)
 		}
 	}
-	result, _ := strconv.Atoi(val)
+	result, err := strconv.Atoi(val)
+	if err != nil {
+		fmt.Println("ERROR CONVERTING TO INT", err)
+	}
 	return result
 }
 
 // vowelCase checks if a given character is a vowel.
 func vowelCase(char byte) bool {
-	vowels := []byte{'a', 'e', 'i', 'o', 'u', 'h'}
-	for _, v := range vowels {
-		if char != v {
-			return false
-		}
+	switch char {
+	case 'a', 'e', 'i', 'o', 'u', 'h', 'A', 'E', 'I', 'O', 'U', 'H':
+		return true
+	default:
+		return false
 	}
-	return true
 }
 
 // Adjusts the punctuation placement in a slice of words.
@@ -214,7 +216,7 @@ func main() {
 	finalStr := strings.Join(finalResult, " ") + "\n"
 
 	// Write the final string to the output file
-	document := os.WriteFile(args[1], []byte(finalStr), 0o644)
+	document := os.WriteFile(args[1], []byte(finalStr), 0o666)
 	if document != nil {
 		fmt.Println(document) // Panic if writing to file fails
 	}
