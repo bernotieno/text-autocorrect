@@ -17,9 +17,9 @@ This Go program processes text input, applies various transformations based on s
 
 2. Navigate to the project directory:
 
-bash
+    ```bash
 
-cd go-reloaded
+    cd go-reloaded
 
 3. Compile and run the program:
 
