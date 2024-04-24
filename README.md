@@ -26,7 +26,7 @@ This Go program processes text input, applies various transformations based on s
 
     $ go run main.go sample.txt result.txt
 
-    Replace sample.txt with your input file containing the text to be processed and result.txt with the desired output file name.
+Replace sample.txt with your input file containing the text to be processed and result.txt with the desired output file name.
 
 ## Sample Input File
 
