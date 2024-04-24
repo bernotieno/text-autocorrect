@@ -18,14 +18,13 @@ This Go program processes text input, applies various transformations based on s
 2. Navigate to the project directory:
 
     ```bash
-
-    cd go-reloaded
+    $ cd go-reloaded
 
 3. Compile and run the program:
 
-bash
+    ```bash
 
-    go run main.go sample.txt result.txt
+    $ go run main.go sample.txt result.txt
 
     Replace sample.txt with your input file containing the text to be processed and result.txt with the desired output file name.
 
@@ -37,9 +36,9 @@ The sample.txt file should contain the text you want to process without modifica
 
 The program includes test files to ensure the correctness of various functions. To run tests, use the following command:
 
-bash
+    ```bash
 
-go test -v
+    $ go test -v
 
 ### Test Files
 
