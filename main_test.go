@@ -2,80 +2,59 @@ package main
 
 import (
 	"fmt"
-	"strings"
 	"testing"
+
+	"go-reloaded/transform"
 )
 
-func TestConvertToDecimal(t *testing.T) {
-	inputtext := "Simply add 42 (hex) and 10 (bin) and you will see the result is 68."
-	expectedoutput := "Simply add 66 and 2 and you will see the result is 68."
-	d := strings.Fields(inputtext)
-	result := wordsTransformer(d)
-	finResult := strings.Join(result, " ")
+func TestConvToDec(t *testing.T) {
+	inputText := "Simply add 42 (hex) and 10 (bin) and you will see the result is 68."
+	expectedText := "Simply add 66 and 2 and you will see the result is 68."
 
-	if finResult == expectedoutput {
-		fmt.Println("TEST PASS")
+	str := transform.TransformWords(inputText)
+
+	if str != expectedText {
+		t.Fatalf("Test failed. Expected: %s, got: %s", expectedText, str)
 	} else {
-		fmt.Println("TEST FAILED")
+		fmt.Println("Test passed sucessfully!")
 	}
 }
 
-func TestCapitalizeWord(t *testing.T) {
-	inputtext := "it (cap) was nothing much"
-	expectedoutput := "It was nothing much"
+func TestIsVowel(t *testing.T) {
+	inputText := "There is no greater agony than bearing a untold story inside you."
+	expectedText := "There is no greater agony than bearing an untold story inside you."
 
-	c := strings.Fields(inputtext)
-	result := wordsTransformer(c)
-	finalResult := strings.Join(result, " ")
+	str := transform.TransformWords(inputText)
 
-	if finalResult == expectedoutput {
-		fmt.Println("TEST PASS")
+	if str != expectedText {
+		t.Fatalf("Test failed. Expected: %s, got: %s", expectedText, str)
 	} else {
-		fmt.Println("TEST FAILED")
+		fmt.Println("Test passed sucessfully!")
 	}
 }
 
-func TestNumberAfterCom(t *testing.T) {
-	inputtext := "no no no no no no no no no no no no no no no no no no no no no no (cap, 12)"
-	expectedoutput := "no no no no no no no no no no No No No No No No No No No No No No"
+func TestNum(t *testing.T) {
+	inputText := "it (cap) was the best of times, it was the worst of times (up) , it was the age of wisdom, it was the age of foolishness (cap, 6) , it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it was the season of darkness, it was the spring of hope, IT WAS THE (low, 3) winter of despair."
+	expectedText := "It was the best of times, it was the worst of TIMES, it was the age of wisdom, It Was The Age Of Foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it was the season of darkness, it was the spring of hope, it was the winter of despair."
 
-	n := strings.Fields(inputtext)
-	result := wordsTransformer(n)
-	finalResult := strings.Join(result, " ")
+	str := transform.TransformWords(inputText)
 
-	if finalResult == expectedoutput {
-		fmt.Println("TEST PASS")
+	if str != expectedText {
+		t.Fatalf("Test failed. Expected: %s, got: %s", expectedText, str)
 	} else {
-		fmt.Println("TEST FAILED")
+		fmt.Println("Test passed sucessfully!")
 	}
 }
 
-func TestVowelCase(t *testing.T) {
-	inputtext := "There is no greater agony than bearing a untold story inside you."
-	expectedoutput := "There is no greater agony than bearing an untold story inside you."
+func TestPunctuation(t *testing.T) {
+	inputText := "Punctuation tests are ... kinda boring ,don't you think !?"
+	expectedText := "Punctuation tests are... kinda boring, don't you think!?"
 
-	v := strings.Fields(inputtext)
-	result := wordsTransformer(v)
-	finalResult := strings.Join(result, " ")
+	str := transform.TransformWords(inputText)
 
-	if finalResult == expectedoutput {
-		fmt.Println("TEST PASS")
+	if str != expectedText {
+		t.Fatalf("Test failed. Expected: %s, got: %s", expectedText, str)
 	} else {
-		fmt.Println("TEST FAILED")
-	}
-}
-
-func TestPunctuations(t *testing.T) {
-	inputtext := "Punctuation tests are ... kinda boring ,don't you think !?"
-	expectedoutput := "Punctuation tests are... kinda boring, don't you think!?"
-
-	p := strings.Fields(inputtext)
-	result := wordsTransformer(p)
-	finalResult := strings.Join(result, " ")
-
-	if finalResult == expectedoutput {
-		fmt.Println("TEST PASS")
-	} else {
-		fmt.Println("TEST FAILED")
+		fmt.Println("Test passed sucessfully!")
 	}
 }
